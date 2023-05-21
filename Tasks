@@ -1,0 +1,63 @@
+-- Util
+reverseBin :: [Int] -> [Int]
+reverseBin [] = []
+reverseBin (x:xs) =  reverseBin xs ++ [x]
+
+-- Tarefa 1
+
+binToDec :: [Int] -> Int
+binToDec [] = 0
+binToDec (x:xs) = if x == 1 then 2 ^ length xs + binToDec xs else binToDec xs
+
+-- Tarefa 2
+
+decToBinAux :: Int -> [Int]
+decToBinAux 0 = [0]
+decToBinAux 1 = [1]
+decToBinAux x =  mod x 2 : decToBinAux((div x 2)) 
+
+decToBin :: Int -> [Int]
+decToBin x = reverseBin (decToBinAux x)
+
+--Tarefa 3
+
+binCompl2Dec :: [Int] -> Int
+binCompl2Dec [] = 0
+binCompl2Dec x =  
+    if div (2 ^ length x) 2 <=  binToDec(x) then
+         binToDec(x) - (2 ^ length x)
+    else    
+         binToDec(x)
+
+-- Tarefa 4 
+
+decCompl2Bin :: Int -> [Int]
+decCompl2Bin 0 = [0]
+decCompl2Bin x = 
+    if x < 0 then
+        decToBin( (2 ^ length (0 : decToBin(-x))) + x)
+    else
+        0 : decToBin(x)
+
+--Tarefa 5
+
+somarBin :: [Int] -> [Int] -> [Int]
+somarBin [] [] = []
+
+somarBin x y = decCompl2Bin(binCompl2Dec(x) + binCompl2Dec(y))
+
+--Tarefa 6
+
+subtrairBin :: [Int] -> [Int] -> [Int]
+subtrairBin [] [] = []
+
+subtrairBin x y = decCompl2Bin(binCompl2Dec(x) - binCompl2Dec(y))
+
+--Tarefa 7
+
+andBin :: [Int] -> [Int] -> [Int]
+andBin [] ys = ys
+andBin xs [] = xs
+andBin (x:xs) (y:ys)
+    | x == 1 && y == 1 = [1] ++ andBin xs ys
+    | otherwise = [0] ++ andBin xs ys
